@@ -1,0 +1,74 @@
+version: "3.9"
+   
+services:
+  redis:
+    container_name: Redis
+    restart: always
+    image: redis:alpine
+
+  db:
+    container_name: MariaDB
+    restart: always
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - TZ=Europe/Prague
+    ports:
+      - "5432:5432"
+
+  backend:
+    container_name: Backend
+    restart: always
+    build: 
+      context: .
+      args:
+        DJANGO_ALLOWED_HOSTS: '*'
+        DJANGO_SECRET_KEY: '*'
+        DJANGO_CORS_ORIGIN_WHITELIST: '*'
+    # command: gunicorn backend.wsgi --bind 0.0.0.0:8000
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    environment:
+      PYTHONUNBUFFERED: 1
+      TZ: "Europe/Prague"
+    volumes:
+      - .:/code
+    ports:
+      - "4200:8000"
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    container_name: Celery-Worker
+    restart: always
+    build: .
+    command: celery -A app worker -l info -E
+    environment:
+      PYTHONUNBUFFERED: 1
+      TZ: "Europe/Prague"
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+
+  celery-beat:
+    container_name: Celery-Beat
+    build: .
+    command: celery -A app beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      PYTHONUNBUFFERED: 1
+      TZ: "Europe/Prague"
+    volumes:
+      - .d:/code
+    depends_on:
+      - db
+      - redis
+  
+
+volumes:
+  build_folder:
