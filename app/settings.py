@@ -28,16 +28,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = 'vhjijU9897DRcgvhhiíuáíáýtžfuzvházížřdzh)úůl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-# ALLOWED_HOSTS = os.environ.get.get("DJANGO_ALLOWED_HOSTS").split(" ")
-
 # # CORS_ORIGIN_ALLOW_ALL = True
 # CORS_ORIGIN_WHITELIST =os.environ.get.get("CORS_ORIGIN_WHITELIST").split(" ")
-ALLOWED_HOSTS = "*"
+ALLOWED_HOSTS = ["*"]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -46,6 +44,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 INSTALLED_APPS = [
     'example_app.apps.ExampleAppConfig',
+    'customer_form.apps.CustomerFormConfig',
+    'reporting.apps.ReportingConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -99,10 +99,10 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DATABSE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASSWORD'),
-        'HOST': env('DATABASE_HOST'),
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
         'PORT': 5432,
     }
 }

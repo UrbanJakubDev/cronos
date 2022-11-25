@@ -7,7 +7,7 @@ services:
     image: redis:alpine
 
   db:
-    container_name: MariaDB
+    container_name: PostgreSQL
     restart: always
     image: postgres
     volumes:
@@ -30,14 +30,14 @@ services:
         DJANGO_SECRET_KEY: '*'
         DJANGO_CORS_ORIGIN_WHITELIST: '*'
     # command: gunicorn backend.wsgi --bind 0.0.0.0:8000
-    command: python /code/manage.py runserver 0.0.0.0:8000
+    command: python /code/manage.py runserver 0.0.0.0:4200
     environment:
       PYTHONUNBUFFERED: 1
       TZ: "Europe/Prague"
     volumes:
       - .:/code
     ports:
-      - "4200:8000"
+      - "4200:4200"
     depends_on:
       - db
       - redis

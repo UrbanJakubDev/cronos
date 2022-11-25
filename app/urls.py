@@ -22,7 +22,11 @@ from django.http import JsonResponse
 urlpatterns = [
     
     # include example_app urls
-    path('example/' , include('example_app.urls')),
+    path('' , include('example_app.urls')),
+
+    # Aplications urls
+    path('customer_form/', include('customer_form.urls')),
+    path('reporting/', include('reporting.urls')),
 
     # include admin urls
     path('admin/', admin.site.urls),
