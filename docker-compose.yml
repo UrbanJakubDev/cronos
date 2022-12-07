@@ -64,10 +64,11 @@ services:
       PYTHONUNBUFFERED: 1
       TZ: "Europe/Prague"
     volumes:
-      - .d:/code
+      - .:/code
     depends_on:
       - db
       - redis
+      - celery
   
 
 volumes:
